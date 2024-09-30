@@ -19,7 +19,7 @@ public class PlayerControls : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //check each action in here.
     }
 
     private void movePlayer()
