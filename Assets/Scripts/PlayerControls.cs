@@ -6,6 +6,9 @@ public class PlayerControls : MonoBehaviour
 {
     private Rigidbody2D playerRigidBody;
     public float movementSpeed;
+    public float maxSpeed;
+    public float acceleration;
+    public float deceleration;
 
     // Start is called before the first frame update
     void Start()
@@ -20,26 +23,72 @@ public class PlayerControls : MonoBehaviour
     void Update()
     {
         //check each action in here.
+        movePlayer();
     }
 
     private void movePlayer()
     {
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        // Get current velocity
+        Vector2 currentVelocity = playerRigidBody.velocity;
+
+        // Check if arrow keys are being held down to increase velocity
+        if (Input.GetKey(KeyCode.LeftArrow))
         {
-            //Increase velocity up to a max velocity, on the release do the opposite.
+            if (currentVelocity.x > -maxSpeed) // Move left
+            {
+                currentVelocity.x -= acceleration * Time.deltaTime;
+            }
         }
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        else if (Input.GetKey(KeyCode.RightArrow))
         {
-            //Increase velocity up to a max velocity, on the release do the opposite.
+            if (currentVelocity.x < maxSpeed) // Move right
+            {
+                currentVelocity.x += acceleration * Time.deltaTime;
+            }
         }
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+
+        if (Input.GetKey(KeyCode.UpArrow))
         {
-            //Increase velocity up to a max velocity, on the release do the opposite.
+            if (currentVelocity.y < maxSpeed) // Move up
+            {
+                currentVelocity.y += acceleration * Time.deltaTime;
+            }
         }
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        else if (Input.GetKey(KeyCode.DownArrow))
         {
-            //Increase velocity up to a max velocity, on the release do the opposite.
+            if (currentVelocity.y > -maxSpeed) // Move down
+            {
+                currentVelocity.y -= acceleration * Time.deltaTime;
+            }
         }
+
+        // When no keys are pressed, apply deceleration
+        if (!Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow))
+        {
+            if (currentVelocity.x > 0)
+            {
+                currentVelocity.x -= deceleration * Time.deltaTime;
+            }
+            else if (currentVelocity.x < 0)
+            {
+                currentVelocity.x += deceleration * Time.deltaTime;
+            }
+        }
+
+        if (!Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.DownArrow))
+        {
+            if (currentVelocity.y > 0)
+            {
+                currentVelocity.y -= deceleration * Time.deltaTime;
+            }
+            else if (currentVelocity.y < 0)
+            {
+                currentVelocity.y += deceleration * Time.deltaTime;
+            }
+        }
+
+        // Apply the updated velocity to the player's Rigidbody
+        playerRigidBody.velocity = currentVelocity;
     }
 
     private void useAbility()
