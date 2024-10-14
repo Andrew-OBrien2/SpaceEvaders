@@ -9,6 +9,10 @@ public class PlayerControls : MonoBehaviour
     public float maxSpeed;
     public float acceleration;
     public float deceleration;
+    public float blinkDistance;
+
+    public GameObject teleportIconPrefab;
+    private GameObject teleportIcon;
 
     // Start is called before the first frame update
     void Start()
@@ -24,6 +28,7 @@ public class PlayerControls : MonoBehaviour
     {
         //check each action in here.
         movePlayer();
+        blinkForward();
     }
 
     private void movePlayer()
@@ -101,14 +106,34 @@ public class PlayerControls : MonoBehaviour
 
     private void blinkForward()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        //while the player is holding space, do this
+        if (Input.GetKey(KeyCode.Space))
         {
-            //display the blink location ahead of them N number of pixel spaces away
+            if (teleportIcon == null)
+            {
+                //                                                                                                               need rotation when instantiating
+                teleportIcon = Instantiate(teleportIconPrefab, new Vector2(transform.position.x, transform.position.y + blinkDistance), Quaternion.identity);
+            }
+            else
+            {
+                //move the existing icon
+                teleportIcon.transform.position = new Vector2(transform.position.x, transform.position.y + blinkDistance);
+            }
+
+            // Make sure the teleport icon doesn't go out of bounds (player boundry box's y value is 5.3)
+            if (teleportIcon.transform.position.y > 5f)
+            {
+                // Set the Y position to 5.2 if it's equal to or greater than 5.3
+                teleportIcon.transform.position = new Vector2(teleportIcon.transform.position.x, 5f);
+            }
         }
 
-        if (Input.GetKeyUp(KeyCode.Space))
+        //if the player releases space, do this
+        if (Input.GetKeyUp(KeyCode.Space) && teleportIcon != null)
         {
-            //teleport the player over to the blink location gameObject
+            transform.position = teleportIcon.transform.position;
+            Destroy(teleportIcon);
+            teleportIcon = null;
         }
     }
 

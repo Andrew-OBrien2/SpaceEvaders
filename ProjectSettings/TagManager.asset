@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Asteroid
   - Enemy
+  - ScoreCounter
+  - Explosion
   layers:
   - Default
   - TransparentFX

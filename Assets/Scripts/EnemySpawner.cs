@@ -25,12 +25,10 @@ public class EnemySpawner : MonoBehaviour
         //this will see how much time has passed since the last frame
         time += Time.deltaTime;
 
-        //I only want to spawn a new bat if there was a specified amouint of time between the last time I spawned an object
         if (time >= delay)
         {
             spawnEnemy();
             time = 0f;
-            //f because it is a float
         }
     }
 

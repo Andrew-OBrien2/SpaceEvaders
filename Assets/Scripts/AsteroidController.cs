@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class AsteroidMovement : MonoBehaviour
 {
-    //make the bat move towards the player
     public float speed;
     private Rigidbody2D asteroidRigidBody;
 
@@ -20,8 +19,11 @@ public class AsteroidMovement : MonoBehaviour
         asteroidRigidBody.velocity = new Vector2 (asteroidRigidBody.velocity.x, -speed);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        Destroy(collision.gameObject);
+        if (!collision.gameObject.CompareTag("Player"))
+        {
+            Destroy(collision.gameObject);
+        }
     }
 }
