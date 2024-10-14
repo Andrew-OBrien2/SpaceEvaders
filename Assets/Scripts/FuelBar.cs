@@ -22,8 +22,9 @@ public class FuelBar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        currentFuel -= fuelDrain * Time.deltaTime;
-        fuelBar.value = currentFuel;
+        //drains the fuel
+        //currentFuel -= fuelDrain * Time.deltaTime;
+        //fuelBar.value = currentFuel;
     }
 
     public void FillFuel()
